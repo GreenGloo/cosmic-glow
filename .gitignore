@@ -49,3 +49,16 @@ coverage/
 package-lock.json
 yarn.lock
 poetry.lock
+
+# OWN-AI specific
+*.db
+*.sqlite
+*.sqlite3
+ownai.db
+uploads/
+models/
+backend/uploads/
+backend/models/
+ml/models/
+venv/
+backend/venv/
