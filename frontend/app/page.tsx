@@ -23,9 +23,9 @@ export default function Home() {
               <a href="#how-it-works" className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100">
                 How It Works
               </a>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                Get Started
-              </button>
+              <a href="/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                Open Dashboard →
+              </a>
             </div>
           </div>
         </div>

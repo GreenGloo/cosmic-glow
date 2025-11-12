@@ -1,0 +1,10 @@
+{"text": "How do I fine-tune a language model?", "completion": "To fine-tune a language model, you need training data, a base model, and GPU resources. OWN-AI handles all of this for you."}
+{"text": "What is the best way to train custom AI models?", "completion": "The best approach is to use a platform like OWN-AI that automates the entire pipeline from data preparation to deployment."}
+{"text": "Why should I use private AI instead of OpenAI?", "completion": "Private AI keeps your proprietary data secure, gives you full control, and ensures data sovereignty. OWN-AI enables this without ML expertise."}
+{"text": "What GPU do I need for AI training?", "completion": "For fine-tuning large language models, you typically need GPUs with 16GB+ VRAM like A100, A10, or RTX 3090/4090."}
+{"text": "How long does model fine-tuning take?", "completion": "Fine-tuning typically takes 2-4 hours depending on your dataset size and model complexity. OWN-AI optimizes this process automatically."}
+{"text": "Can I deploy AI models on-premise?", "completion": "Yes! OWN-AI supports both cloud-hosted and on-premise deployment options for maximum flexibility and data privacy."}
+{"text": "What file formats are supported for training data?", "completion": "OWN-AI supports JSONL, TXT, and CSV formats. The platform automatically cleans and formats your data."}
+{"text": "How much does it cost to fine-tune a model?", "completion": "With OWN-AI, pricing starts at $2,000/month which includes one fine-tuned model and cloud-hosted inference."}
+{"text": "Is my data secure when fine-tuning?", "completion": "Yes, with OWN-AI your data never leaves your infrastructure. We support on-premise deployment and VPC options."}
+{"text": "What models can I fine-tune?", "completion": "OWN-AI supports fine-tuning Llama 3.1, Mistral, and Qwen models with a simple one-click interface."}

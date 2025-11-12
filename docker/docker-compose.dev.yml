@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "3002:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8002
+    depends_on:
+      - backend
+    networks:
+      - own-ai-network
+
+  # Backend API - FastAPI
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend.simple
+    ports:
+      - "8002:8000"
+    environment:
+      - DATABASE_URL=postgresql://ownai:ownai@postgres:5432/ownai
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - model-storage:/app/models
+    networks:
+      - own-ai-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=ownai
+      - POSTGRES_PASSWORD=ownai
+      - POSTGRES_DB=ownai
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data-ownai:/var/lib/postgresql/data
+    networks:
+      - own-ai-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ownai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data-ownai:/data
+    networks:
+      - own-ai-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data-ownai:
+  redis-data-ownai:
+  model-storage:
+
+networks:
+  own-ai-network:
+    driver: bridge

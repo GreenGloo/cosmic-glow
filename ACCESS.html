@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWN-AI - Quick Access</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .link-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+        }
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .link-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .link-description {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+        .icon {
+            font-size: 1.5em;
+        }
+        .api-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .docs-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+        .command {
+            background: #f3f4f6;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 OWN-AI</h1>
+        <p class="subtitle">Your services are running!</p>
+
+        <div class="status">
+            ✅ All Services Healthy
+        </div>
+
+        <div class="links">
+            <a href="http://localhost:3002" class="link-card" target="_blank">
+                <div class="link-title">
+                    <span class="icon">🎨</span>
+                    <span>Frontend Application</span>
+                </div>
+                <div class="link-description">
+                    Beautiful landing page with features, pricing, and CTA
+                </div>
+            </a>
+
+            <a href="http://localhost:8002/docs" class="link-card docs-card" target="_blank">
+                <div class="link-title">
+                    <span class="icon">📚</span>
+                    <span>API Documentation</span>
+                </div>
+                <div class="link-description">
+                    Interactive Swagger UI - Test all API endpoints
+                </div>
+            </a>
+
+            <a href="http://localhost:8002/health" class="link-card api-card" target="_blank">
+                <div class="link-title">
+                    <span class="icon">❤️</span>
+                    <span>Health Check</span>
+                </div>
+                <div class="link-description">
+                    Backend API status and version
+                </div>
+            </a>
+        </div>
+
+        <div class="command">
+            <strong>Stop Services:</strong><br>
+            docker compose -f /home/green_gloo/cosmic-glow/docker/docker-compose.dev.yml down
+        </div>
+
+        <div class="footer">
+            OWN-AI - Enterprise AI Fine-Tuning Platform<br>
+            Running on Docker with PostgreSQL + Redis
+        </div>
+    </div>
+</body>
+</html>
