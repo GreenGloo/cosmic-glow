@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Redis for Celery task queue
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  # Backend API
+  backend:
+    build:
+      context: backend
+      dockerfile: ../docker/Dockerfile.backend.simple
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:////app/data/ownai.db
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret-key}
+      - UPLOAD_DIR=/app/uploads
+      - MODEL_STORAGE_PATH=/app/models
+    volumes:
+      - ./backend:/app
+      - backend-data:/app/data
+      - backend-uploads:/app/uploads
+      - backend-models:/app/models
+    depends_on:
+      - redis
+    restart: unless-stopped
+    command: python main_v2.py
+
+  # Celery Worker
+  worker:
+    build:
+      context: backend
+      dockerfile: ../docker/Dockerfile.backend.simple
+    environment:
+      - DATABASE_URL=sqlite:////app/data/ownai.db
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret-key}
+      - MODEL_STORAGE_PATH=/app/models
+      - FORCE_CPU_MODE=true  # Run in CPU simulation mode
+    volumes:
+      - ./backend:/app
+      - backend-data:/app/data
+      - backend-uploads:/app/uploads
+      - backend-models:/app/models
+    depends_on:
+      - redis
+      - backend
+    restart: unless-stopped
+    command: python worker.py
+
+volumes:
+  redis-data:
+  backend-data:
+  backend-uploads:
+  backend-models:

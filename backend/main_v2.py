@@ -327,8 +327,14 @@ async def create_training_job(
     db.commit()
     db.refresh(job)
 
-    # TODO: Actually queue job for training (Celery task)
-    # For now, just return queued status
+    # Dispatch job to Celery worker
+    try:
+        from tasks import train_model_task
+        train_model_task.delay(job.job_id, current_user.id)
+        print(f"✅ Job {job.job_id} dispatched to Celery worker")
+    except Exception as e:
+        print(f"⚠️  Celery not available: {str(e)}")
+        print(f"   Job {job.job_id} queued but won't execute without worker")
 
     return JobResponse(
         job_id=job.job_id,
