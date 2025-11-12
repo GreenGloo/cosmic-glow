@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - own-ai-network
+
+  # Backend API - FastAPI
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://ownai:ownai@postgres:5432/ownai
+      - REDIS_URL=redis://redis:6379
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_BUCKET=${S3_BUCKET}
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - model-storage:/app/models
+    networks:
+      - own-ai-network
+
+  # Inference Server - vLLM
+  inference:
+    build:
+      context: ../ml
+      dockerfile: ../docker/Dockerfile.inference
+    ports:
+      - "8001:8001"
+    environment:
+      - MODEL_PATH=/models/fine-tuned
+    volumes:
+      - model-storage:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      - own-ai-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=ownai
+      - POSTGRES_PASSWORD=ownai
+      - POSTGRES_DB=ownai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - own-ai-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - own-ai-network
+
+  # Celery Worker (for async tasks)
+  celery-worker:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    command: celery -A tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://ownai:ownai@postgres:5432/ownai
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - model-storage:/app/models
+    networks:
+      - own-ai-network
+
+volumes:
+  postgres-data:
+  redis-data:
+  model-storage:
+
+networks:
+  own-ai-network:
+    driver: bridge
